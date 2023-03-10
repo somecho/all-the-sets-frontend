@@ -1,0 +1,36 @@
+.pitch-class-input {
+}
+.keyboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3em;
+}
+
+.pitch-row {
+    display:flex;
+}
+
+.spacer-button {
+    border: none;
+}
+
+.key-button {
+    width: 2.5em;
+    height: 2.5em;
+    user-select: none;
+}
+
+.pitch-button {
+    text-align: center;
+    border: black 1px solid;
+    border-radius: 50%;
+    padding: 0;
+    line-height: 2.3em;
+    margin: 0 2px;
+}
+
+.black-key {
+    background: black;
+    color: white;
+}
