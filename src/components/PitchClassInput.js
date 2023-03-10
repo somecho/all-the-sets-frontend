@@ -1,6 +1,15 @@
 import React from "react";
 import "./PitchClassInput.css";
 
+function handleSuperScript(name){
+  if(name === null){return null}
+  if(name.length ===2){
+    return ( <span>{name[0]} <sup>#</sup></span> )
+  } else {
+    return name[0]
+  }
+}
+
 class PitchButton extends React.Component {
   render() {
     let pitchNames = [
@@ -28,7 +37,8 @@ class PitchButton extends React.Component {
     }
     let className = `key-button ${spacerClass} ${colorClass}`;
 
-    return <div className={className}>{name}</div>;
+    return <div className={className}>{handleSuperScript(name)}</div>;
+    // return <div className={className}>{name}</div>;
   }
 }
 

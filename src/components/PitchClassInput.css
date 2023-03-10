@@ -32,5 +32,7 @@
 
 .black-key {
     background: black;
+    line-height: 1.8em;
+    letter-spacing: -2px;
     color: white;
 }
