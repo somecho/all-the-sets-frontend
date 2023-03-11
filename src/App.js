@@ -3,6 +3,7 @@ import React from "react";
 import NavigationBar from "./components/NavigationBar";
 import PitchClassInput from "./components/PitchClassInput";
 import PitchSelectDisplay from "./components/PitchSelectDisplay";
+import shared from "./shared.js"
 
 class App extends React.Component {
   constructor(props) {
@@ -27,29 +28,15 @@ class App extends React.Component {
     };
   }
   handleClick(pcId) {
-    let pitchNames = [
-      "C",
-      "C#",
-      "D",
-      "D#",
-      "E",
-      "F",
-      "F#",
-      "G",
-      "G#",
-      "A",
-      "A#",
-      "B",
-    ];
     let keyStates = this.state.keyStates.slice();
     let toneRow = this.state.toneRow.slice();
     let pitchClassRow = this.state.pitchClassRow.slice();
     if (keyStates[pcId].on) {
       pitchClassRow = pitchClassRow.concat([pcId]);
-      toneRow = toneRow.concat([pitchNames[pcId]]);
+      toneRow = toneRow.concat([shared.pitchNames[pcId]]);
     } else {
       pitchClassRow = pitchClassRow.filter((i) => i !== pcId);
-      toneRow = toneRow.filter((i) => i !== pitchNames[pcId]);
+      toneRow = toneRow.filter((i) => i !== shared.pitchNames[pcId]);
     }
     keyStates[pcId].on = !keyStates[pcId].on;
     this.setState({ keyStates, pitchClassRow, toneRow });

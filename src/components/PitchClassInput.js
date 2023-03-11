@@ -1,6 +1,7 @@
 import React from "react";
 import "../fonts.css"
 import "./PitchClassInput.css";
+import shared from "../shared"
 
 function handleSuperScript(name) {
   if (name === null) {
@@ -19,26 +20,12 @@ function handleSuperScript(name) {
 
 class PitchButton extends React.Component {
   render() {
-    let pitchNames = [
-      "C",
-      "C#",
-      "D",
-      "D#",
-      "E",
-      "F",
-      "F#",
-      "G",
-      "G#",
-      "A",
-      "A#",
-      "B",
-    ];
     let isSpacer = this.props.pitchClass.spacer;
     if (isSpacer) {
       return <div className={"key-button spacer-button"} />;
     } else {
       let pcId = this.props.pitchClass.pitchClass;
-      let name = pitchNames[pcId];
+      let name = shared.pitchNames[pcId];
       let state = this.props.keyStates[pcId]
       let colorClass = this.props.rowID === 0 ? "black-key" : "";
       let rowClass = this.props.rowID === 0 ? "black-row" : "";
