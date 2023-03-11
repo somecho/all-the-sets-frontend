@@ -1,4 +1,5 @@
 import React from "react";
+import "../fonts.css"
 import "./PitchClassInput.css";
 
 function handleSuperScript(name) {
