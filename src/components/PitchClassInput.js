@@ -1,12 +1,18 @@
 import React from "react";
 import "./PitchClassInput.css";
 
-function handleSuperScript(name){
-  if(name === null){return null}
-  if(name.length ===2){
-    return ( <span>{name[0]} <sup>#</sup></span> )
+function handleSuperScript(name) {
+  if (name === null) {
+    return null;
+  }
+  if (name.length === 2) {
+    return (
+      <span>
+        {name[0]} <sup>#</sup>
+      </span>
+    );
   } else {
-    return name[0]
+    return name[0];
   }
 }
 
@@ -27,18 +33,28 @@ class PitchButton extends React.Component {
       "B",
     ];
     let isSpacer = this.props.pitchClass.spacer;
-    let name = isSpacer ? null : pitchNames[this.props.pitchClass.pitchClass];
-    let spacerClass = isSpacer ? "spacer-button" : "pitch-button";
-    let colorClass;
     if (isSpacer) {
-      colorClass = null;
+      return <div className={"key-button spacer-button"} />;
     } else {
-      colorClass = this.props.rowID === 0 ? "black-key" : "white-key";
+      let pcId = this.props.pitchClass.pitchClass;
+      let name = pitchNames[pcId];
+      let state = this.props.keyStates[pcId]
+      let colorClass = this.props.rowID === 0 ? "black-key" : "";
+      let rowClass = this.props.rowID === 0 ? "black-row" : "";
+      let clickableClass = state.on ? "" : "unclickable-key"
+      let keyClass = state.on ? colorClass : clickableClass;
+      let className = `key-button pitch-button ${keyClass} ${rowClass}`;
+      return (
+        <div
+          className={className}
+          onClick={() => {
+            this.props.onClick(pcId);
+          }}
+        >
+          {handleSuperScript(name)}
+        </div>
+      );
     }
-    let className = `key-button ${spacerClass} ${colorClass}`;
-
-    return <div className={className}>{handleSuperScript(name)}</div>;
-    // return <div className={className}>{name}</div>;
   }
 }
 
@@ -68,7 +84,13 @@ class Keyboard extends React.Component {
         {keyboardRows.map((row, rowIndex) => (
           <div className="pitch-row" key={rowIndex}>
             {row.map((pc, pcIndex) => (
-              <PitchButton key={pcIndex} pitchClass={pc} rowID={rowIndex} />
+              <PitchButton
+                onClick={(i) => this.props.onClick(i)}
+                keyStates={this.props.keyStates}
+                key={pcIndex}
+                pitchClass={pc}
+                rowID={rowIndex}
+              />
             ))}
           </div>
         ))}
@@ -81,7 +103,10 @@ class PitchClassInput extends React.Component {
   render() {
     return (
       <div className="pitch-class-input">
-        <Keyboard />
+        <Keyboard
+          onClick={(i) => this.props.onClick(i)}
+          keyStates={this.props.keyStates}
+        />
       </div>
     );
   }

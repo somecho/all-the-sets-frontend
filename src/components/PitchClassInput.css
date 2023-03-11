@@ -1,38 +1,47 @@
 .pitch-class-input {
 }
 .keyboard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 3em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3em;
 }
 
 .pitch-row {
-    display:flex;
+  display: flex;
 }
 
 .spacer-button {
-    border: none;
+  border: none;
 }
 
 .key-button {
-    width: 2.5em;
-    height: 2.5em;
-    user-select: none;
+  width: 2.5em;
+  height: 2.5em;
+  user-select: none;
 }
 
 .pitch-button {
-    text-align: center;
-    border: black 1px solid;
-    border-radius: 50%;
-    padding: 0;
-    line-height: 2.3em;
-    margin: 0 2px;
+  text-align: center;
+  border: black 1px solid;
+  border-radius: 50%;
+  padding: 0;
+  line-height: 2.3em;
+  margin: 0 2px;
+}
+
+.black-row {
+  letter-spacing: -2px;
+  line-height: 1.8em;
 }
 
 .black-key {
-    background: black;
-    line-height: 1.8em;
-    letter-spacing: -2px;
-    color: white;
+  background: black;
+  color: white;
+}
+
+.unclickable-key {
+  background: #f1f1f1;
+  border: #f1f1f1 1px solid;
+  color: #9c9c9c;
 }
