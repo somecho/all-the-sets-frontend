@@ -1,6 +1,6 @@
 import React from "react";
+import "../fonts.css"
 import "./PitchSelectDisplay.css";
-import shared from "../shared"
 
 class RowItemDisplay extends React.Component {
   render() {
@@ -17,7 +17,7 @@ class Row extends React.Component {
         : "";
       return <RowItemDisplay key={i} content={content} />;
     });
-    return <div className="row">{row}</div>;
+    return <div className={`row ${this.props.type}`}>{row}</div>;
   }
 }
 class PitchSelectDisplay extends React.Component {
@@ -25,8 +25,8 @@ class PitchSelectDisplay extends React.Component {
     return (
       <div className="display-container">
         <div className="pitch-select-display">
-          <Row content={this.props.pitchClassRow} />
-          <Row content={this.props.toneRow} />
+          <Row type="letter-row" content={this.props.toneRow} />
+          <Row type="number-row" content={this.props.pitchClassRow} />
         </div>
       </div>
     );

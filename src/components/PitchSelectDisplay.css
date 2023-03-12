@@ -1,6 +1,12 @@
 .row {
     display: flex;
 }
+.letter-row {
+    font-family: "Inter";
+}
+.number-row {
+    font-family: "JetBrains Mono";
+}
 
 .display-container {
     display: flex;
