@@ -10,7 +10,7 @@ function handleSuperScript(name) {
   if (name.length === 2) {
     return (
       <span>
-        {name[0]} <sup>#</sup>
+        {name[0]} <sup>♯</sup>
       </span>
     );
   } else {

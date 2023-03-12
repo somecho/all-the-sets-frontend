@@ -23,6 +23,8 @@
     height: 32px;
     margin: 1px 1px;
     text-align: center;
-    line-height: 32px;
     color: #9c9c9c;
+    white-space: nowrap;
+    line-height: 32px;
+    letter-spacing: -1px;
 }

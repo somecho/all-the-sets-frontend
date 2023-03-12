@@ -1,5 +1,6 @@
 import React from "react";
 import "./PitchSelectDisplay.css";
+import shared from "../shared"
 
 class RowItemDisplay extends React.Component {
   render() {

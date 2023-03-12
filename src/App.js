@@ -3,6 +3,7 @@ import React from "react";
 import NavigationBar from "./components/NavigationBar";
 import PitchClassInput from "./components/PitchClassInput";
 import PitchSelectDisplay from "./components/PitchSelectDisplay";
+import AnalysisDisplay from "./components/AnalysisDisplay";
 import shared from "./shared.js"
 
 class App extends React.Component {
@@ -53,6 +54,7 @@ class App extends React.Component {
           toneRow={this.state.toneRow}
           pitchClassRow={this.state.pitchClassRow}
         />
+      <AnalysisDisplay pcset={this.state.pitchClassRow}/>
       </div>
     );
   }
