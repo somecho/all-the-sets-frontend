@@ -1,5 +1,8 @@
 import React from "react";
 
+function mod(a, b) {
+  return ((a % b) + b) % b;
+}
 function cycleAdd12(arr) {
   return arr.slice(1).concat(arr[0] + 12);
 }
@@ -41,7 +44,7 @@ function findNormalOrder(arr) {
 }
 
 function makePrime(normalOrder) {
-  return normalOrder.map((i) => (i - normalOrder[0]) % 12);
+  return normalOrder.map((i) => mod(i - normalOrder[0], 12));
 }
 
 function arrayToString(arr) {
