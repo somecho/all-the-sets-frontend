@@ -35,7 +35,6 @@ function findNormalOrder(arr) {
     let distances = permutations.map((p) => p.distanceArray[i]);
     let minDist = Math.min(...distances);
     permutations = permutations.filter((p) => p.distanceArray[i] === minDist);
-    console.log(permutations);
     if (permutations.length === 1) {
       return permutations[0].permutation.map((i) => i % 12);
     }
@@ -43,9 +42,48 @@ function findNormalOrder(arr) {
   return permutations[0].permutation.map((i) => i % 12);
 }
 
-function makePrime(normalOrder) {
-  return normalOrder.map((i) => mod(i - normalOrder[0], 12));
+function arrayToCommaString(arr) {
+  let result = "";
+  for (let i = 0; i < arr.length; i++) {
+    result += arr[i];
+    if (i !== arr.length - 1) {
+      result += ",";
+    }
+  }
+  return result;
 }
+function invertSet(pcset) {
+  return pcset.map((pc) => mod(12 - pc, 12));
+}
+async function makePrime(normalOrder) {
+  //First check the current normal order
+  let primeOrder = normalOrder.map((i) => mod(i - normalOrder[0], 12));
+  let res = await fetch(
+    `https://all-the-sets.onrender.com/pcs/${arrayToCommaString(primeOrder)}`
+  );
+  let data = await res.json();
+  if (data.pcs) {
+    return { primeOrder: data.pcs, name: data.name };
+  }
+  //If it doesn't exist, invert, sort ascending and get the new normal order
+  //transposed to 0
+  let inversion = invertSet(primeOrder);
+  let ascendingInversion = sortAscending(inversion);
+  let normal = findNormalOrder(ascendingInversion)
+  normal = normal.map((i)=>mod(i-normal[0],12))
+  res = await fetch(
+    `https://all-the-sets.onrender.com/pcs/${arrayToCommaString(normal)}`
+  );
+  data = await res.json();
+  if (data.pcs) {
+    return { primeOrder: data.pcs, name: data.name };
+  }
+  return { primeOrder: [], name: "No prime found" };
+}
+
+// fetch("https://all-the-sets.onrender.com/pcs/0,2,3,6,9")
+//   .then((response)=>response.json())
+//   .then((data)=>console.log(data))
 
 function arrayToString(arr) {
   let result = "";
@@ -62,17 +100,36 @@ function sortAscending(arr) {
 }
 
 class Analysis extends React.Component {
-  render() {
-    let pcset = this.props.pcset;
-    let ascending = sortAscending(pcset);
+  constructor(props) {
+    super(props);
+    let ascending = sortAscending(this.props.pcset);
     let normal = findNormalOrder(ascending);
-    let prime = makePrime(normal);
+    this.state = {
+      ascending,
+      normal,
+      prime: "",
+    };
+  }
+  componentDidUpdate() {
+    let ascending = sortAscending(this.props.pcset);
+    let normal = findNormalOrder(ascending);
+    makePrime(normal).then((res) => {
+      this.setState({
+        ascending,
+        normal,
+        prime: arrayToString(res.primeOrder),
+        primeName: res.name,
+      });
+    });
+  }
+  render() {
     return (
       <div className="analysis">
-        <div>Ordered: {arrayToString(pcset)}</div>
-        <div>Unordered: {arrayToString(ascending)}</div>
-        <div>Normal Order:{arrayToString(normal)}</div>
-        <div> Prime form: {arrayToString(prime)} </div>
+        <div>Ordered: {arrayToString(this.props.pcset)}</div>
+        <div>Unordered: {arrayToString(this.state.ascending)}</div>
+        <div>Normal Order:{arrayToString(this.state.normal)}</div>
+        <div> Prime form: {this.state.prime} </div>
+        <div>{this.state.primeName}</div>
       </div>
     );
   }
