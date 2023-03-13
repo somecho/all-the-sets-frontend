@@ -3,6 +3,20 @@ import React from "react";
 function mod(a, b) {
   return ((a % b) + b) % b;
 }
+function calculateIntervalVector(pcs) {
+  let size = pcs.length;
+  let LUT = [0, 0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
+  let intervalVector = [0, 0, 0, 0, 0, 0];
+  for (let i = 0; i < size; i++) {
+    for (let j = i + 1; j < size; j++) {
+      let diff = Math.abs(pcs[i] - pcs[j]) % 12;
+      let id = LUT[diff];
+      intervalVector[id]++;
+    }
+  }
+  return intervalVector;
+}
+
 function cycleAdd12(arr) {
   return arr.slice(1).concat(arr[0] + 12);
 }
@@ -103,10 +117,16 @@ class Analysis extends React.Component {
   render() {
     return (
       <div className="analysis">
-        <div>Ordered: {arrayToString(this.props.pcset)}</div>
-        <div>Unordered: {arrayToString(this.props.ascending)}</div>
-        <div>Normal Order:{arrayToString(this.props.normal)}</div>
-        <div> Prime form: {this.props.prime} </div>
+        <div>
+          Ordered: {arrayToString(this.props.pcset)}, Interval Vector:{" "}
+          {arrayToString(calculateIntervalVector(this.props.pcset))}
+        </div>
+        <div>Unordered: {arrayToString(this.props.ascending)},
+          Interval Vector: {arrayToString(calculateIntervalVector(this.props.ascending))}</div>
+        <div>Normal Order:{arrayToString(this.props.normal)},
+          Interval Vector: {arrayToString(calculateIntervalVector(this.props.normal))}</div>
+        <div> Prime form: {arrayToString(this.props.prime)},
+          Interval Vector: {arrayToString(calculateIntervalVector(this.props.prime))}</div>
         <div>{this.props.name}</div>
       </div>
     );
@@ -121,7 +141,8 @@ class AnalysisDisplay extends React.Component {
     this.state = {
       ascending,
       normal,
-      prime: "",
+      prime: [],
+      calculating: false
     };
   }
 
@@ -133,7 +154,7 @@ class AnalysisDisplay extends React.Component {
         this.setState({
           ascending,
           normal,
-          prime: arrayToString(res.primeOrder),
+          prime: res.primeOrder,
           primeName: res.name,
         });
       });
