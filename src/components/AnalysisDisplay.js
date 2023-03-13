@@ -69,8 +69,8 @@ async function makePrime(normalOrder) {
   //transposed to 0
   let inversion = invertSet(primeOrder);
   let ascendingInversion = sortAscending(inversion);
-  let normal = findNormalOrder(ascendingInversion)
-  normal = normal.map((i)=>mod(i-normal[0],12))
+  let normal = findNormalOrder(ascendingInversion);
+  normal = normal.map((i) => mod(i - normal[0], 12));
   res = await fetch(
     `https://all-the-sets.onrender.com/pcs/${arrayToCommaString(normal)}`
   );
@@ -100,6 +100,20 @@ function sortAscending(arr) {
 }
 
 class Analysis extends React.Component {
+  render() {
+    return (
+      <div className="analysis">
+        <div>Ordered: {arrayToString(this.props.pcset)}</div>
+        <div>Unordered: {arrayToString(this.props.ascending)}</div>
+        <div>Normal Order:{arrayToString(this.props.normal)}</div>
+        <div> Prime form: {this.props.prime} </div>
+        <div>{this.props.name}</div>
+      </div>
+    );
+  }
+}
+
+class AnalysisDisplay extends React.Component {
   constructor(props) {
     super(props);
     let ascending = sortAscending(this.props.pcset);
@@ -110,32 +124,22 @@ class Analysis extends React.Component {
       prime: "",
     };
   }
-  componentDidUpdate() {
-    let ascending = sortAscending(this.props.pcset);
-    let normal = findNormalOrder(ascending);
-    makePrime(normal).then((res) => {
-      this.setState({
-        ascending,
-        normal,
-        prime: arrayToString(res.primeOrder),
-        primeName: res.name,
-      });
-    });
-  }
-  render() {
-    return (
-      <div className="analysis">
-        <div>Ordered: {arrayToString(this.props.pcset)}</div>
-        <div>Unordered: {arrayToString(this.state.ascending)}</div>
-        <div>Normal Order:{arrayToString(this.state.normal)}</div>
-        <div> Prime form: {this.state.prime} </div>
-        <div>{this.state.primeName}</div>
-      </div>
-    );
-  }
-}
 
-class AnalysisDisplay extends React.Component {
+  componentDidUpdate() {
+    if (this.props.pcset.length > 2) {
+      let ascending = sortAscending(this.props.pcset);
+      let normal = findNormalOrder(ascending);
+      makePrime(normal).then((res) => {
+        this.setState({
+          ascending,
+          normal,
+          prime: arrayToString(res.primeOrder),
+          primeName: res.name,
+        });
+      });
+    }
+  }
+
   render() {
     return (
       <div className="analysis-display">
@@ -143,7 +147,13 @@ class AnalysisDisplay extends React.Component {
         {this.props.pcset.length < 3 ? (
           <div>Select atleast 3 pitches for analysis.</div>
         ) : (
-          <Analysis pcset={this.props.pcset} />
+          <Analysis
+            pcset={this.props.pcset}
+            ascending={this.state.ascending}
+            normal={this.state.normal}
+            prime={this.state.prime}
+            name={this.state.primeName}
+          />
         )}
       </div>
     );
