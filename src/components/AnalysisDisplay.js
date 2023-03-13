@@ -121,12 +121,19 @@ class Analysis extends React.Component {
           Ordered: {arrayToString(this.props.pcset)}, Interval Vector:{" "}
           {arrayToString(calculateIntervalVector(this.props.pcset))}
         </div>
-        <div>Unordered: {arrayToString(this.props.ascending)},
-          Interval Vector: {arrayToString(calculateIntervalVector(this.props.ascending))}</div>
-        <div>Normal Order:{arrayToString(this.props.normal)},
-          Interval Vector: {arrayToString(calculateIntervalVector(this.props.normal))}</div>
-        <div> Prime form: {arrayToString(this.props.prime)},
-          Interval Vector: {arrayToString(calculateIntervalVector(this.props.prime))}</div>
+        <div>
+          Unordered: {arrayToString(this.props.ascending)}, Interval Vector:{" "}
+          {arrayToString(calculateIntervalVector(this.props.ascending))}
+        </div>
+        <div>
+          Normal Order:{arrayToString(this.props.normal)}, Interval Vector:{" "}
+          {arrayToString(calculateIntervalVector(this.props.normal))}
+        </div>
+        <div>
+          {" "}
+          Prime form: {typeof this.props.prime === 'string' ? this.props.prime : arrayToString(this.props.prime)}, Interval Vector:{" "}
+          {arrayToString(calculateIntervalVector(this.props.prime))}
+        </div>
         <div>{this.props.name}</div>
       </div>
     );
@@ -146,16 +153,24 @@ class AnalysisDisplay extends React.Component {
     };
   }
 
-  componentDidUpdate() {
-    if (this.props.pcset.length > 2) {
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.pcset.length > 2 &&
+      this.props.pcset.length !== prevProps.pcset.length
+    ) {
+      this.setState({calculating: true})
       let ascending = sortAscending(this.props.pcset);
       let normal = findNormalOrder(ascending);
+      this.setState({
+        ascending,
+        normal,
+        prime: "Calculating..."
+      })
       makePrime(normal).then((res) => {
         this.setState({
-          ascending,
-          normal,
           prime: res.primeOrder,
           primeName: res.name,
+          calculating: false
         });
       });
     }
@@ -176,6 +191,7 @@ class AnalysisDisplay extends React.Component {
             name={this.state.primeName}
           />
         )}
+      <div>{this.state.calculating ? "calculating..." : ""}</div>
       </div>
     );
   }
