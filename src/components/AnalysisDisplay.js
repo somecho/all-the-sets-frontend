@@ -149,7 +149,8 @@ class AnalysisDisplay extends React.Component {
       ascending,
       normal,
       prime: [],
-      calculating: false
+      calculating: false,
+      requestQueue: []
     };
   }
 
@@ -158,25 +159,40 @@ class AnalysisDisplay extends React.Component {
       this.props.pcset.length > 2 &&
       this.props.pcset.length !== prevProps.pcset.length
     ) {
-      this.setState({calculating: true})
+
       let ascending = sortAscending(this.props.pcset);
       let normal = findNormalOrder(ascending);
+      let requestQueue = this.state.requestQueue.slice()
+      if(requestQueue.length > 3){
+        requestQueue = requestQueue.slice(-3)
+      }
+      requestQueue.push(makePrime(normal))
+
       this.setState({
         ascending,
         normal,
-        prime: "Calculating..."
+        prime: "Calculating...",
+        calculating: true,
+        requestQueue
       })
-      makePrime(normal).then((res) => {
+
+      //using Queue ensures latest request is latest result
+      Promise.all(requestQueue).then((values)=>{
+        let latest = values[values.length-1]
         this.setState({
-          prime: res.primeOrder,
-          primeName: res.name,
+          prime: latest.primeOrder,
+          primeName: latest.name,
           calculating: false
-        });
-      });
+        })
+      })
+
     }
   }
 
   render() {
+    if(this.state.lastRequest){
+     console.log(this.state.lastRequest)
+    }
     return (
       <div className="analysis-display">
         <div className="analysis-title">Analysis:</div>
