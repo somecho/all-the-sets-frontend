@@ -4,7 +4,7 @@ import NavigationBar from "./components/NavigationBar";
 import PitchClassInput from "./components/PitchClassInput";
 import PitchSelectDisplay from "./components/PitchSelectDisplay";
 import AnalysisDisplay from "./components/AnalysisDisplay";
-import shared from "./shared.js"
+import shared from "./shared.js";
 
 class App extends React.Component {
   constructor(props) {
@@ -46,15 +46,17 @@ class App extends React.Component {
     return (
       <div className="App">
         <NavigationBar />
-        <PitchClassInput
-          onClick={(i) => this.handleClick(i)}
-          keyStates={this.state.keyStates}
-        />
-        <PitchSelectDisplay
-          toneRow={this.state.toneRow}
-          pitchClassRow={this.state.pitchClassRow}
-        />
-      <AnalysisDisplay pcset={this.state.pitchClassRow}/>
+        <div className="main-content-container">
+          <PitchClassInput
+            onClick={(i) => this.handleClick(i)}
+            keyStates={this.state.keyStates}
+          />
+          <PitchSelectDisplay
+            toneRow={this.state.toneRow}
+            pitchClassRow={this.state.pitchClassRow}
+          />
+          <AnalysisDisplay pcset={this.state.pitchClassRow} />
+        </div>
       </div>
     );
   }

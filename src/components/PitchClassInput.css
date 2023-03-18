@@ -1,10 +1,12 @@
 .pitch-class-input {
+  margin: 0 2em;
 }
+
 .keyboard {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 3em;
+  padding: 2em;
 }
 
 .pitch-row {
@@ -48,3 +50,4 @@
   border: #f1f1f1 1px solid;
   color: #9c9c9c;
 }
+

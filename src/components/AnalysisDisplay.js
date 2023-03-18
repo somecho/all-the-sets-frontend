@@ -1,4 +1,5 @@
 import React from "react";
+import "./AnalysisDisplay.css"
 
 function mod(a, b) {
   return ((a % b) + b) % b;
@@ -116,26 +117,38 @@ function sortAscending(arr) {
 class Analysis extends React.Component {
   render() {
     return (
-      <div className="analysis">
-        <div>
-          Ordered: {arrayToString(this.props.pcset)}, Interval Vector:{" "}
-          {arrayToString(calculateIntervalVector(this.props.pcset))}
-        </div>
-        <div>
-          Unordered: {arrayToString(this.props.ascending)}, Interval Vector:{" "}
-          {arrayToString(calculateIntervalVector(this.props.ascending))}
-        </div>
-        <div>
-          Normal Order:{arrayToString(this.props.normal)}, Interval Vector:{" "}
-          {arrayToString(calculateIntervalVector(this.props.normal))}
-        </div>
-        <div>
-          {" "}
-          Prime form: {typeof this.props.prime === 'string' ? this.props.prime : arrayToString(this.props.prime)}, Interval Vector:{" "}
-          {arrayToString(calculateIntervalVector(this.props.prime))}
-        </div>
-        <div>{this.props.name}</div>
-      </div>
+      <table className="analysis-table inter">
+        <tbody>
+          <tr>
+            <td>Ordered</td>
+            <td>{arrayToString(this.props.pcset)}</td>
+          </tr>
+          <tr>
+            <td>Unordered</td>
+            <td>{arrayToString(this.props.ascending)}</td>
+          </tr>
+          <tr>
+            <td>Normal Order</td>
+            <td>{arrayToString(this.props.normal)}</td>
+          </tr>
+          <tr>
+            <td>Prime Form</td>
+            <td>
+              {typeof this.props.prime === "string"
+                ? this.props.prime
+                : arrayToString(this.props.prime)}
+            </td>
+          </tr>
+          <tr>
+            <td>Set Name</td>
+            <td>{this.props.name}</td>
+          </tr>
+          <tr>
+            <td>Interval Vector</td>
+      <td>{arrayToString(calculateIntervalVector(this.props.pcset)).replace(/\s/g,'')}</td>
+          </tr>
+        </tbody>
+      </table>
     );
   }
 }
@@ -150,7 +163,7 @@ class AnalysisDisplay extends React.Component {
       normal,
       prime: [],
       calculating: false,
-      requestQueue: []
+      requestQueue: [],
     };
   }
 
@@ -159,43 +172,38 @@ class AnalysisDisplay extends React.Component {
       this.props.pcset.length > 2 &&
       this.props.pcset.length !== prevProps.pcset.length
     ) {
-
       let ascending = sortAscending(this.props.pcset);
       let normal = findNormalOrder(ascending);
-      let requestQueue = this.state.requestQueue.slice()
-      if(requestQueue.length > 3){
-        requestQueue = requestQueue.slice(-3)
+      let requestQueue = this.state.requestQueue.slice();
+      if (requestQueue.length > 3) {
+        requestQueue = requestQueue.slice(-3);
       }
-      requestQueue.push(makePrime(normal))
+      requestQueue.push(makePrime(normal));
 
       this.setState({
         ascending,
         normal,
         prime: "Calculating...",
         calculating: true,
-        requestQueue
-      })
+        requestQueue,
+      });
 
       //using Queue ensures latest request is latest result
-      Promise.all(requestQueue).then((values)=>{
-        let latest = values[values.length-1]
+      Promise.all(requestQueue).then((values) => {
+        let latest = values[values.length - 1];
         this.setState({
           prime: latest.primeOrder,
           primeName: latest.name,
-          calculating: false
-        })
-      })
-
+          calculating: false,
+        });
+      });
     }
   }
 
   render() {
-    if(this.state.lastRequest){
-     console.log(this.state.lastRequest)
-    }
     return (
       <div className="analysis-display">
-        <div className="analysis-title">Analysis:</div>
+        <div className="section-title inter">ANALYSIS</div>
         {this.props.pcset.length < 3 ? (
           <div>Select atleast 3 pitches for analysis.</div>
         ) : (
@@ -207,7 +215,6 @@ class AnalysisDisplay extends React.Component {
             name={this.state.primeName}
           />
         )}
-      <div>{this.state.calculating ? "calculating..." : ""}</div>
       </div>
     );
   }
