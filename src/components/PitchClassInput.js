@@ -1,7 +1,8 @@
 import React from "react";
-import "../fonts.css"
+import "../fonts.css";
 import "./PitchClassInput.css";
-import shared from "../shared"
+import shared from "../shared";
+import {Container} from 'semantic-ui-react'
 
 function handleSuperScript(name) {
   if (name === null) {
@@ -26,10 +27,10 @@ class PitchButton extends React.Component {
     } else {
       let pcId = this.props.pitchClass.pitchClass;
       let name = shared.pitchNames[pcId];
-      let state = this.props.keyStates[pcId]
+      let state = this.props.keyStates[pcId];
       let colorClass = this.props.rowID === 0 ? "black-key" : "";
       let rowClass = this.props.rowID === 0 ? "black-row" : "";
-      let clickableClass = state.on ? "" : "unclickable-key"
+      let clickableClass = state.on ? "" : "unclickable-key";
       let keyClass = state.on ? colorClass : clickableClass;
       let className = `key-button pitch-button ${keyClass} ${rowClass}`;
       return (
@@ -92,7 +93,11 @@ class PitchClassInput extends React.Component {
   render() {
     return (
       <div className="pitch-class-input">
-        <div className="midground-text text-container inter">Tap the keys to select pitches:</div>
+
+        {/* <div className="midground-text text-container inter">Tap the keys to select pitches:</div> */}
+        <Container text style={{margin: "0.5em 0", color: "#9c9c9c"}}>
+          Tap the keys to select pitches:
+        </Container>
         <Keyboard
           onClick={(i) => this.props.onClick(i)}
           keyStates={this.props.keyStates}

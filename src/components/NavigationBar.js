@@ -1,12 +1,18 @@
-import '../fonts.css'
-import './NavigationBar.css'
+import { Header } from "semantic-ui-react";
 
-function NavigationBar() {
-  return (
-    <div className="nav-bar">
-      <div className="nav-title">All The Sets</div>
-    </div>
-  );
-}
+const NavigationBar = () => (
+  <div style={{ background: "#FFD43D" }}>
+    <Header
+      as="h1"
+      inverted
+      color="black"
+      textAlign="center"
+      style={{ padding: "0.5em 0",
+               fontFamily: "Carter One"}}
+    >
+      All The Sets
+    </Header>
+  </div>
+);
 
 export default NavigationBar;

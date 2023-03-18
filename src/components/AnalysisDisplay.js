@@ -1,5 +1,6 @@
 import React from "react";
 import "./AnalysisDisplay.css";
+import { Table, Header } from "semantic-ui-react";
 
 function mod(a, b) {
   return ((a % b) + b) % b;
@@ -116,59 +117,59 @@ function sortAscending(arr) {
 
 class Analysis extends React.Component {
   render() {
-    let zrelated = ""
-    if (this.props.zrelated.numResults){
-      for(let i = 0 ; i < this.props.zrelated.results.length; i++){
-        zrelated += this.props.zrelated.results[i].name
-        if(i < this.props.zrelated.results.length - 1){
-          zrelated += ", "
+    let zrelated = "";
+    if (this.props.zrelated.numResults) {
+      for (let i = 0; i < this.props.zrelated.results.length; i++) {
+        zrelated += this.props.zrelated.results[i].name;
+        if (i < this.props.zrelated.results.length - 1) {
+          zrelated += ", ";
         }
       }
     }
     return (
-      <table className="analysis-table inter">
-        <tbody>
-          <tr>
-            <td>Ordered</td>
-            <td>{arrayToString(this.props.pcset)}</td>
-          </tr>
-          <tr>
-            <td>Unordered</td>
-            <td>{arrayToString(this.props.ascending)}</td>
-          </tr>
-          <tr>
-            <td>Normal Order</td>
-            <td>{arrayToString(this.props.normal)}</td>
-          </tr>
-          <tr>
-            <td>Prime Form</td>
-            <td>
+      <Table basic="very">
+        <Table.Body>
+          <Table.Row>
+            <Table.Cell>Ordered</Table.Cell>
+            <Table.Cell>{arrayToString(this.props.pcset)}</Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>Unordered</Table.Cell>
+            <Table.Cell>{arrayToString(this.props.ascending)}</Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>Normal Order</Table.Cell>
+            <Table.Cell>{arrayToString(this.props.normal)}</Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>Prime Form</Table.Cell>
+            <Table.Cell>
               {typeof this.props.prime === "string"
                 ? this.props.prime
                 : arrayToString(this.props.prime)}
-            </td>
-          </tr>
-          <tr>
-            <td>Set Name</td>
-            <td>{this.props.name}</td>
-          </tr>
-          <tr>
-            <td>Interval Vector</td>
-            <td>
+            </Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>Set Name</Table.Cell>
+            <Table.Cell>{this.props.name}</Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>Interval Vector</Table.Cell>
+            <Table.Cell>
               {arrayToString(calculateIntervalVector(this.props.pcset)).replace(
                 /\s/g,
                 ""
               )}
-            </td>
-          </tr>
+            </Table.Cell>
+          </Table.Row>
           {this.props.zrelated.numResults ? (
-            <tr>
-              <td>Z-Related sets</td>
-            <td>{zrelated}</td>
-            </tr>
+            <Table.Row>
+              <Table.Cell>Z-Related sets</Table.Cell>
+              <Table.Cell>{zrelated}</Table.Cell>
+            </Table.Row>
           ) : null}
-        </tbody>
-      </table>
+        </Table.Body>
+      </Table>
     );
   }
 }
@@ -225,7 +226,7 @@ class AnalysisDisplay extends React.Component {
   render() {
     return (
       <div className="analysis-display">
-        <div className="section-title inter">ANALYSIS</div>
+        <Header as='h3'>ANALYSIS</Header>
         {this.props.pcset.length < 3 ? (
           <div>Select atleast 3 pitches for analysis.</div>
         ) : (

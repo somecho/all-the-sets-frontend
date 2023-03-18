@@ -1,4 +1,5 @@
 import "./App.css";
+import 'semantic-ui-less/semantic.less'
 import React from "react";
 import NavigationBar from "./components/NavigationBar";
 import PitchClassInput from "./components/PitchClassInput";
