@@ -1,5 +1,5 @@
 import React from "react";
-import "./AnalysisDisplay.css"
+import "./AnalysisDisplay.css";
 
 function mod(a, b) {
   return ((a % b) + b) % b;
@@ -78,7 +78,7 @@ async function makePrime(normalOrder) {
   );
   let data = await res.json();
   if (data.pcs) {
-    return { primeOrder: data.pcs, name: data.name };
+    return { primeOrder: data.pcs, name: data.name, zrelated: data.zrelated };
   }
   //If it doesn't exist, invert, sort ascending and get the new normal order
   //transposed to 0
@@ -91,7 +91,7 @@ async function makePrime(normalOrder) {
   );
   data = await res.json();
   if (data.pcs) {
-    return { primeOrder: data.pcs, name: data.name };
+    return { primeOrder: data.pcs, name: data.name, zrelated: data.zrelated };
   }
   return { primeOrder: [], name: "No prime found" };
 }
@@ -116,6 +116,15 @@ function sortAscending(arr) {
 
 class Analysis extends React.Component {
   render() {
+    let zrelated = ""
+    if (this.props.zrelated.numResults){
+      for(let i = 0 ; i < this.props.zrelated.results.length; i++){
+        zrelated += this.props.zrelated.results[i].name
+        if(i < this.props.zrelated.results.length - 1){
+          zrelated += ", "
+        }
+      }
+    }
     return (
       <table className="analysis-table inter">
         <tbody>
@@ -145,8 +154,19 @@ class Analysis extends React.Component {
           </tr>
           <tr>
             <td>Interval Vector</td>
-      <td>{arrayToString(calculateIntervalVector(this.props.pcset)).replace(/\s/g,'')}</td>
+            <td>
+              {arrayToString(calculateIntervalVector(this.props.pcset)).replace(
+                /\s/g,
+                ""
+              )}
+            </td>
           </tr>
+          {this.props.zrelated.numResults ? (
+            <tr>
+              <td>Z-Related sets</td>
+            <td>{zrelated}</td>
+            </tr>
+          ) : null}
         </tbody>
       </table>
     );
@@ -164,6 +184,7 @@ class AnalysisDisplay extends React.Component {
       prime: [],
       calculating: false,
       requestQueue: [],
+      zrelated: {},
     };
   }
 
@@ -195,6 +216,7 @@ class AnalysisDisplay extends React.Component {
           prime: latest.primeOrder,
           primeName: latest.name,
           calculating: false,
+          zrelated: latest.zrelated,
         });
       });
     }
@@ -213,6 +235,7 @@ class AnalysisDisplay extends React.Component {
             normal={this.state.normal}
             prime={this.state.prime}
             name={this.state.primeName}
+            zrelated={this.state.zrelated}
           />
         )}
       </div>
