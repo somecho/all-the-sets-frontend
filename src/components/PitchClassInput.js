@@ -33,14 +33,15 @@ class PitchButton extends React.Component {
       let keyClass = state.on ? colorClass : clickableClass;
       let className = `key-button pitch-button ${keyClass} ${rowClass}`;
       return (
-        <div
+        <button
           className={className}
+          type="button"
           onClick={() => {
             this.props.onClick(pcId);
           }}
         >
           {handleSuperScript(name)}
-        </div>
+        </button>
       );
     }
   }
@@ -75,7 +76,7 @@ class Keyboard extends React.Component {
               <PitchButton
                 onClick={(i) => this.props.onClick(i)}
                 keyStates={this.props.keyStates}
-                key={pcIndex}
+                key={shared.pitchNames[pc.pitchClass]}
                 pitchClass={pc}
                 rowID={rowIndex}
               />
