@@ -19,10 +19,19 @@
     align-items: center;
     border: 2px solid #f1f1f1;
     border-radius: 1em;
-    padding: 1.5em 1.5em;
+    padding: 0em 1em 1em 1.5em;
     font-family: Inter;
 }
+a.item:not(.active) {
+    color: #f1f1f1 !important;
+}
+a.item.active {
+    color: #9c9c9c !important;
+}
+div.ui.text.menu {
+    margin: 0.25em 0;
 
+}
 .row-item-display {
     background: #F1F1F1;
     width: 24px;

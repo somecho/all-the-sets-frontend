@@ -1,6 +1,6 @@
-import React from "react";
 import "../fonts.css";
 import "./PitchSelectDisplay.css";
+import React from "react";
 import {
   Accidental,
   Voice,
@@ -9,6 +9,7 @@ import {
   Stave,
   StaveNote,
 } from "vexflow";
+import { Tab } from "semantic-ui-react";
 
 class RowItemDisplay extends React.Component {
   render() {
@@ -29,7 +30,7 @@ class Row extends React.Component {
 class ScoreView extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.notes.length !== prevProps.notes.length) {
-      this.drawScore()
+      this.drawScore();
     }
   }
   drawScore() {
@@ -40,18 +41,18 @@ class ScoreView extends React.Component {
     } else {
       let notes = this.props.notes;
       const renderer = new Renderer(score, Renderer.Backends.SVG);
-      renderer.resize(300, 110);
+      renderer.resize(300, 80);
       const context = renderer.getContext();
-      const stave = new Stave(0, 0, 300);
+      const stave = new Stave(0, -25, 300);
       stave.addClef("treble");
       stave.setContext(context).draw();
 
       notes = notes.map((n) => {
         let newNote = new StaveNote({ keys: [`${n}/4`], duration: "q" });
-        if(n.length > 1){
-          newNote.addModifier(new Accidental("#"))
+        if (n.length > 1) {
+          newNote.addModifier(new Accidental("#"));
         }
-        return newNote
+        return newNote;
       });
 
       if (notes.length > 0) {
@@ -72,12 +73,25 @@ class ScoreView extends React.Component {
 
 class PitchSelectDisplay extends React.Component {
   render() {
+    let panes = [
+      {
+        menuItem: "Set View",
+        render: () => (
+          <>
+            <Row type="letter-row" content={this.props.toneRow} />
+            <Row type="number-row" content={this.props.pitchClassRow} />
+          </>
+        ),
+      },
+      {
+        menuItem: "Score View",
+        render: () => <ScoreView notes={this.props.toneRow}></ScoreView>,
+      },
+    ];
     return (
       <div className="display-container">
         <div className="pitch-select-display">
-          <Row type="letter-row" content={this.props.toneRow} />
-          <Row type="number-row" content={this.props.pitchClassRow} />
-          <ScoreView notes={this.props.toneRow}></ScoreView>
+          <Tab menu={{ text: true }} panes={panes} />
         </div>
       </div>
     );
