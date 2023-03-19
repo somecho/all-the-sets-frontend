@@ -27,6 +27,54 @@ class Row extends React.Component {
     return <div className={`row ${this.props.type}`}>{row}</div>;
   }
 }
+
+class ChordView extends React.Component {
+  componentDidUpdate(prevProps) {
+    if (this.props.notes.length !== prevProps.notes.length) {
+      this.drawScore();
+    }
+  }
+  drawScore() {
+    let score = document.querySelector("#chord-view");
+    if (score.hasChildNodes()) {
+      score.replaceChildren();
+      this.drawScore();
+    } else {
+      const renderer = new Renderer(score, Renderer.Backends.SVG);
+      renderer.resize(300, 80);
+      const context = renderer.getContext();
+      const stave = new Stave(0, -25, 300);
+      stave.addClef("treble");
+      stave.setContext(context).draw();
+      let chordKeys = this.props.notes.map((n) => {
+        return `${n}/4`;
+      });
+      let chord = new StaveNote({
+        keys: chordKeys,
+        duration: "1",
+      });
+      for (let i in this.props.notes) {
+        if (this.props.notes[i].length > 1) {
+          chord.addModifier(new Accidental("#"), i);
+        }
+      }
+
+      if (this.props.notes.length > 0) {
+        const voice = new Voice({ num_beats: 4, beat_value: 4 });
+        voice.addTickables([chord]);
+        new Formatter().joinVoices([voice]).format([voice], 256);
+        voice.draw(context, stave);
+      }
+    }
+  }
+  componentDidMount() {
+    this.drawScore();
+  }
+  render() {
+    return <div id="chord-view"></div>;
+  }
+}
+
 class ScoreView extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.notes.length !== prevProps.notes.length) {
@@ -85,7 +133,11 @@ class PitchSelectDisplay extends React.Component {
       },
       {
         menuItem: "Score View",
-        render: () => <ScoreView notes={this.props.toneRow}></ScoreView>,
+        render: () => <ScoreView notes={this.props.toneRow} />,
+      },
+      {
+        menuItem: "Chord View",
+        render: () => <ChordView notes={this.props.toneRow} />,
       },
     ];
     return (
