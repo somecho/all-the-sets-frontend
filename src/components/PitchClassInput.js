@@ -93,8 +93,6 @@ class PitchClassInput extends React.Component {
   render() {
     return (
       <div className="pitch-class-input">
-
-        {/* <div className="midground-text text-container inter">Tap the keys to select pitches:</div> */}
         <Container text style={{margin: "0.5em 0", color: "#9c9c9c"}}>
           Tap the keys to select pitches:
         </Container>
